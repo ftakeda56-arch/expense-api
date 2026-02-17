@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // Access the global OTP store
+export const dynamic = 'force-dynamic';
 declare global {
   var otpStore: Map<string, { otp: string; expires: number }>;
 }

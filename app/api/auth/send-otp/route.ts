@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
 
+export const dynamic = 'force-dynamic';
 // In-memory OTP storage (use Redis or database in production)
 // This is a simple Map that stores OTP codes with expiration
 declare global {
