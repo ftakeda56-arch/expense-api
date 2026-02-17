@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+export const dynamic = 'force-dynamic';
 // Salesforce OAuth configuration
 const SFDC_CLIENT_ID = process.env.SFDC_CLIENT_ID;
 const SFDC_REDIRECT_URI = process.env.SFDC_REDIRECT_URI || 'https://expense-app-ten-sigma.vercel.app/api/sfdc/callback';
