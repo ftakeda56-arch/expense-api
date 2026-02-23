@@ -8,7 +8,7 @@ const supabase = process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_KEY
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'https://expense-app-ten-sigma.vercel.app/api/google/callback';
+const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || 'https://expense-api-one.vercel.app/api/google/callback';
 
 export async function GET(request: NextRequest) {
   try {
@@ -19,13 +19,13 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       return new NextResponse(generateErrorPage('認証がキャンセルされました'), {
-        headers: { 'Content-Type': 'text/html' },
+        headers: { 'Content-Type': 'text/html; charset=utf-8' },
       });
     }
 
     if (!code || !state) {
       return new NextResponse(generateErrorPage('認証パラメータが不足しています'), {
-        headers: { 'Content-Type': 'text/html' },
+        headers: { 'Content-Type': 'text/html; charset=utf-8' },
       });
     }
 
@@ -36,13 +36,13 @@ export async function GET(request: NextRequest) {
       email = stateData.email;
     } catch {
       return new NextResponse(generateErrorPage('無効な認証状態です'), {
-        headers: { 'Content-Type': 'text/html' },
+        headers: { 'Content-Type': 'text/html; charset=utf-8' },
       });
     }
 
     if (!GOOGLE_CLIENT_ID || !GOOGLE_CLIENT_SECRET) {
       return new NextResponse(generateErrorPage('Google設定が完了していません'), {
-        headers: { 'Content-Type': 'text/html' },
+        headers: { 'Content-Type': 'text/html; charset=utf-8' },
       });
     }
 
@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
       const errorData = await tokenResponse.json();
       console.error('Google token error:', errorData);
       return new NextResponse(generateErrorPage('トークン取得に失敗しました'), {
-        headers: { 'Content-Type': 'text/html' },
+        headers: { 'Content-Type': 'text/html; charset=utf-8' },
       });
     }
 
@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
       if (upsertError) {
         console.error('Supabase error:', upsertError);
         return new NextResponse(generateErrorPage('接続情報の保存に失敗しました'), {
-          headers: { 'Content-Type': 'text/html' },
+          headers: { 'Content-Type': 'text/html; charset=utf-8' },
         });
       }
     } else {
@@ -110,13 +110,13 @@ export async function GET(request: NextRequest) {
 
     // Return success page that closes the window
     return new NextResponse(generateSuccessPage(), {
-      headers: { 'Content-Type': 'text/html' },
+      headers: { 'Content-Type': 'text/html; charset=utf-8' },
     });
 
   } catch (error) {
     console.error('Google callback error:', error);
     return new NextResponse(generateErrorPage('サーバーエラーが発生しました'), {
-      headers: { 'Content-Type': 'text/html' },
+      headers: { 'Content-Type': 'text/html; charset=utf-8' },
     });
   }
 }
@@ -124,8 +124,9 @@ export async function GET(request: NextRequest) {
 function generateSuccessPage(): string {
   return `
     <!DOCTYPE html>
-    <html>
+    <html lang="ja">
       <head>
+        <meta charset="utf-8">
         <title>Google連携完了</title>
         <style>
           body {
@@ -185,8 +186,9 @@ function generateSuccessPage(): string {
 function generateErrorPage(message: string): string {
   return `
     <!DOCTYPE html>
-    <html>
+    <html lang="ja">
       <head>
+        <meta charset="utf-8">
         <title>エラー</title>
         <style>
           body {
