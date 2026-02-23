@@ -99,17 +99,25 @@ async function fetchCalendarMeetings(
     const data = await response.json();
     const events: CalendarEvent[] = [];
 
-    // Filter events that contain "Meeting" or "打ち合わせ"
+    // Count events that match specific keywords
+    const meetingKeywords = [
+      'meeting', '打合せ', '打ち合わせ', '確定', 'fixed', '様'
+    ];
+
     for (const item of data.items || []) {
       const title = item.summary || '';
       const lowerTitle = title.toLowerCase();
+      const attendeeCount = (item.attendees || []).length;
 
-      if (lowerTitle.includes('meeting') || title.includes('打ち合わせ')) {
+      // Check if title matches any keyword (case-insensitive)
+      const matchesKeyword = meetingKeywords.some(kw => lowerTitle.includes(kw.toLowerCase()));
+
+      if (matchesKeyword) {
         events.push({
           id: item.id,
           title: title,
           date: item.start?.dateTime || item.start?.date || '',
-          attendees: (item.attendees || []).length,
+          attendees: attendeeCount,
         });
       }
     }
